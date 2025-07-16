@@ -3,20 +3,21 @@ import Stripe from 'stripe';
 
 const secretKey = process.env.STRIPE_SECRET_KEY;
 
-if (!secretKey) {
-  throw new Error('Missing STRIPE_SECRET_KEY environment variable');
-}
-
-const stripe = new Stripe(secretKey, {
-  apiVersion: "2025-06-30.basil", // ✅ Valid version
-});
-
+// Do NOT return here — just check
+const stripe = secretKey
+  ? new Stripe(secretKey, {   apiVersion: '2025-06-30.basil', })
+  : null;
 
 export async function POST(req: Request) {
-  const body = await req.json();
-  const { totalCost } = body;
+  if (!stripe) {
+    console.error('❌ STRIPE_SECRET_KEY not set — Stripe not initialized');
+    return NextResponse.json({ error: 'Payment service unavailable' }, { status: 500 });
+  }
 
   try {
+    const body = await req.json();
+    const { totalCost } = body;
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
@@ -27,7 +28,7 @@ export async function POST(req: Request) {
             product_data: {
               name: 'Subscription Plan',
             },
-            unit_amount: Math.round(Number(totalCost) * 100), // convert to cents
+            unit_amount: Math.round(Number(totalCost) * 100),
           },
           quantity: 1,
         },
