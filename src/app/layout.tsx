@@ -44,7 +44,6 @@ export const metadata: Metadata = {
     title: "Phish Defense - phishdefense.com",
     description:
       "Train your team with phishing simulations and real-world security insights.",
-    images: ["/logo.gif"], // replace with your actual Twitter image
   },
 };
 

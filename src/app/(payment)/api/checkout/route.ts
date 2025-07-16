@@ -1,11 +1,19 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const secretKey = process.env.STRIPE_SECRET_KEY;
+
+if (!secretKey) {
+  throw new Error('Missing STRIPE_SECRET_KEY environment variable');
+}
+
+const stripe = new Stripe(secretKey, {
+  apiVersion: '2025-06-30.basil', 
+});
+
 
 export async function POST(req: Request) {
   const body = await req.json();
-
   const { totalCost } = body;
 
   try {
@@ -19,7 +27,7 @@ export async function POST(req: Request) {
             product_data: {
               name: 'Subscription Plan',
             },
-            unit_amount: Math.round(Number(totalCost) * 100), // Convert dollars to cents
+            unit_amount: Math.round(Number(totalCost) * 100), // convert to cents
           },
           quantity: 1,
         },
