@@ -1,5 +1,6 @@
 import React from 'react';
 import { IconType } from 'react-icons';
+
 import {
   AiFillFile,
   AiFillClockCircle,
@@ -43,14 +44,8 @@ const benefits: Benefit[] = [
 const PhishingBenefits: React.FC = () => {
   return (
     <section className="relative py-16 px-4 bg-white overflow-hidden">
-      {/* Optional background image */}
-      <img
-        src="https://themepanthers.com/nioland/pages/wp-content/uploads/2023/08/pattern-9.png"
-        alt="decorative pattern"
-        className="absolute top-0 left-0 w-32 opacity-20 pointer-events-none"
-      />
       <div className="max-w-6xl mx-auto text-center mb-12">
-        <p className="text-indigo-500 uppercase tracking-wide font-semibold mb-2">Benefits</p>
+        <p className="text-[#45c2a4] uppercase tracking-wide font-semibold mb-2">Benefits</p>
         <h2 className="text-3xl md:text-4xl font-bold">Phishing Reporter Plugin</h2>
       </div>
 
@@ -62,7 +57,7 @@ const PhishingBenefits: React.FC = () => {
               key={index}
               className="flex items-start space-x-4 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition"
             >
-              <div className="text-indigo-500 text-3xl">
+              <div className="text-teal-600 text-3xl">
                 <Icon />
               </div>
               <div>

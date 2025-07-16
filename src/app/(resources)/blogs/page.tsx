@@ -17,6 +17,19 @@ const categories = [
   "Tech",
 ];
 
+type BlogPost = {
+  id: number;
+  slug: string;
+  title: { rendered: string };
+  excerpt: { rendered: string };
+  date: string;
+  _embedded?: {
+    "wp:featuredmedia"?: { source_url: string }[];
+    "wp:term"?: { name: string }[][];
+  };
+};
+
+
 // Fetch blog posts
 async function getPosts({
   page = 1,
@@ -49,7 +62,7 @@ export default function BlogPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<BlogPost[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   
   const search = searchParams.get('search') || '';
@@ -148,7 +161,7 @@ export default function BlogPage() {
         {!loading && posts.length === 0 ? (
           <p className="text-center text-gray-500">No blog posts found.</p>
         ) : (
-          posts.map((post: any) => {
+          posts.map((post: BlogPost) => {
             const title = decode(post.title.rendered);
             const excerpt = decode(post.excerpt.rendered.replace(/<[^>]+>/g, ""));
             const image = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;

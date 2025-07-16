@@ -16,7 +16,7 @@ const faqs = [
   {
     question: "What makes it unique compared to other solutions?",
     answer:
-      "Tailored content, diverse phishing scenarios, and a user-centric approach for effective training."
+      "Tailored content diverse phishing scenarios and a user-centric approach for effective training."
   },
   {
     question: "Can it be accessed on various devices?",
@@ -24,11 +24,12 @@ const faqs = [
       "Yes, the simulation is designed for seamless access on desktops, laptops, tablets, and mobile phones."
   },
   {
-    question: "What's the pricing model for the service?",
+    question: "What the pricing model for the service?",
     answer:
       "We offer transparent, competitive pricing globally, ensuring value for organizations prioritizing cybersecurity awareness."
   },
 ];
+;
 
 export default function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -47,7 +48,7 @@ export default function FaqSection() {
           </p>
           <h2 className="text-3xl font-bold text-gray-800 mt-2 mb-4">Frequently Asked Questions</h2>
           <p className="text-gray-600 mb-6">
-            Feel free to reach out for an in-depth exploration of how the Email Phishing Simulation can fortify your organization's resilience.
+            Feel free to reach out for an in-depth exploration of how the Email Phishing Simulation can fortify your organizations resilience.
           </p>
           <Link
             href="/contact"

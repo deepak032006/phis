@@ -1,34 +1,13 @@
 import { notFound } from "next/navigation";
 import { decode } from "html-entities";
 import Image from "next/image";
+import type { Metadata } from "next";
 
-// Fetch all slugs at build time
-export async function generateStaticParams() {
-  try {
-    const res = await fetch(
-      "https://phishdefense.com/wp-json/wp/v2/posts?per_page=100&_fields=slug",
-      { next: { revalidate: 3600 } } // Revalidate every hour
-    );
-    
-    if (!res.ok) return [];
-    
-    const posts = await res.json();
-    return posts.map((post: any) => ({
-      slug: post.slug,
-    }));
-  } catch (error) {
-    console.error("Error fetching slugs:", error);
-    return [];
-  }
-}
-
-type PageProps = {
-  params: {
-    slug: string;
-  };
+type PostSlug = {
+  slug: string;
 };
 
-// Fetch single post by slug
+// Single getPost function for both page and metadata
 async function getPost(slug: string) {
   try {
     const res = await fetch(
@@ -37,9 +16,7 @@ async function getPost(slug: string) {
     );
 
     if (!res.ok) {
-      if (res.status === 404) {
-        return null;
-      }
+      if (res.status === 404) return null;
       throw new Error(`Failed to fetch post: ${res.status} ${res.statusText}`);
     }
 
@@ -51,8 +28,83 @@ async function getPost(slug: string) {
   }
 }
 
-export default async function PostPage({ params }: PageProps) {
+export async function generateStaticParams(): Promise<PostSlug[]> {
+  try {
+    const res = await fetch(
+      "https://phishdefense.com/wp-json/wp/v2/posts?per_page=100&_fields=slug",
+      { next: { revalidate: 3600 } }
+    );
+
+    if (!res.ok) return [];
+
+    const posts = (await res.json()) as PostSlug[];
+    return posts.map((post) => ({
+      slug: post.slug,
+    }));
+  } catch (error) {
+    console.error("Error fetching slugs:", error);
+    return [];
+  }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
   const post = await getPost(params.slug);
+  if (!post) {
+    return {
+      title: "Post not found",
+      openGraph: {
+        title: "Post not found",
+        description: "This blog post could not be found.",
+        url: `https://phishdefense.com/blogs/${params.slug}`,
+        siteName: "PhishDefense",
+        images: [
+          { url: "https://phishdefense.com/default-og.jpg" }
+        ],
+        type: "article",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: "Post not found",
+        description: "This blog post could not be found.",
+        images: ["https://phishdefense.com/default-og.jpg"],
+      },
+    };
+  }
+
+  const title = decode(post.title.rendered);
+  const excerpt = decode(post.excerpt.rendered.replace(/<[^>]+>/g, ""));
+  const image =
+    post._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||
+    "https://phishdefense.com/default-og.jpg";
+  const url = `https://phishdefense.com/blogs/${post.slug}`;
+
+  return {
+    title,
+    description: excerpt,
+    openGraph: {
+      title,
+      description: excerpt,
+      url,
+      siteName: "PhishDefense",
+      images: [{ url: image }],
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: excerpt,
+      images: [image],
+    },
+  };
+}
+
+// ✅ Simplified props type to match Next.js expectations
+export default async function BlogPostPage(props: { params: { slug: string } }) {
+  const post = await getPost(props.params.slug);
 
   if (!post) return notFound();
 
@@ -83,6 +135,7 @@ export default async function PostPage({ params }: PageProps) {
             width={800}
             height={400}
             className="rounded-md object-cover w-full"
+            priority
           />
         </div>
       )}
@@ -94,3 +147,4 @@ export default async function PostPage({ params }: PageProps) {
     </article>
   );
 }
+

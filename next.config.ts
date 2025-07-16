@@ -5,7 +5,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['phishdefense.com'],
+    domains: ['phishdefense.com', 'themepanthers.com'],
   },
 };
 

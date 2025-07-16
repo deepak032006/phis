@@ -1,4 +1,7 @@
+'use client';
+
 import React from "react";
+import Image from "next/image";
 
 const teamMembers = [
   {
@@ -46,12 +49,12 @@ export default function TeamSection() {
     <section className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
-          <div className="mt-10 text-m inline-block bg-[#149c8c]  text-white rounded-full px-8 text-lg mb-8">
+          <div className="mt-10 text-m inline-block bg-[#149c8c] text-white rounded-full px-8 text-lg mb-8">
             Our Story
           </div>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Get in touch for personalized assistance. We're here to help and provide solutions tailored to your requirements.
+            Get in touch for personalized assistance. We&#39;re here to help and provide solutions tailored to your requirements.
           </p>
         </div>
 
@@ -63,12 +66,16 @@ export default function TeamSection() {
                 member.highlight ? "sm:col-span-2 xl:col-span-2" : ""
               }`}
             >
-              <img
-                src={member.image}
-                alt={member.name}
-                className="w-full h-85 object-cover object-top"
-              />
-              <div className="p-2 text-left">
+              <div className="w-full h-80 relative">
+                <Image
+                  src={member.image}
+                  alt={member.name}
+                  fill
+                  className="object-cover object-top"
+                  priority={index < 2}
+                />
+              </div>
+              <div className="p-4 text-left">
                 <h3 className="text-xl font-semibold mb-1">{member.name}</h3>
                 <p className="text-gray-600 text-sm mb-4">{member.role}</p>
                 <a

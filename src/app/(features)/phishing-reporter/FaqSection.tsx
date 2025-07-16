@@ -7,7 +7,7 @@ const faqs = [
   {
     question: "Can my organization benefit from this?",
     answer:
-    "Yes, it's tailored for organizations, seamlessly integrating into your security infrastructure, providing enhanced protection against evolving threats."
+    "Yes, it tailored for organizations, seamlessly integrating into your security infrastructure, providing enhanced protection against evolving threats."
   },
   {
     question: "How easy is the installation?",
@@ -15,19 +15,19 @@ const faqs = [
     "Effortless. Follow simple instructions for download or activation, tailored to your email platform, and start reinforcing your security instantly."
   },
   {
-    question: "Can I monitor my report's progress?",
+    question: "Can I monitor my report progress?",
     answer:
     "Yes, enjoy peace of mind with a tracking feature that keeps you in the loop, providing transparency on the status of your reported emails."
   },
   {
-    question: "What's the advantage of reporting?",
+    question: "What the advantage of reporting?",
     answer:
     "Your reports empower Phish Defense to analyze and proactively protect you, creating a dynamic shield against evolving phishing threats. "
   },
   {
     question: "Is my data safe during reporting?",
     answer:
-    "Absolutely. Your privacy is paramount; the plugin handles sensitive information securely, guaranteeing utmost confidentiality."
+    "Absolutely. Your privacy is paramount the plugin handles sensitive information securely, guaranteeing utmost confidentiality."
   },
 ];
 
@@ -48,7 +48,7 @@ export default function FaqSection() {
           </p>
           <h2 className="text-3xl font-bold text-gray-800 mt-2 mb-4">Frequently Asked Questions</h2>
           <p className="text-gray-600 mb-6">
-            Feel free to reach out for an in-depth exploration of how the Phishing Reporter Plugin can strengthen your organization's email security.
+            Feel free to reach out for an in-depth exploration of how the Phishing Reporter Plugin can strengthen your organization email security.
           </p>
           <Link
             href="/contact"

@@ -10,7 +10,7 @@ const ContactForm: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-[#b2dde3] to-[##e0f7fa] px-4 mt-15">
       <form
-        action="https://formsubmit.co/umang@phishdefense.com"
+        action="https://formsubmit.co/970de22de88802dfc425acde6bbb42a7"
         method="POST"
         className="w-full max-w-lg bg-white rounded-xl shadow-lg p-8 space-y-6"
       >
@@ -21,7 +21,7 @@ const ContactForm: React.FC = () => {
 
         {/* Title */}
         <h2 className="text-3xl font-bold text-[#45c2a4] text-center">Contact Us</h2>
-        <p className="text-center text-gray-600">We'd love to hear from you</p>
+        <p className="text-center text-gray-600">We&apos;d love to hear from you</p>
 
         {/* Name */}
         <input

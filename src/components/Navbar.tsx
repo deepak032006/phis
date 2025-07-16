@@ -83,7 +83,7 @@ export default function Navbar() {
       >
         <div className="flex flex-col px-6 py-6 gap-5 font-semibold text-gray-700">
           <MobileNavItem href="/" label="Home" onClick={() => setMenuOpen(false)} active={isActive('/')} />
-          <MobileDropdown label="Features" onClose={() => setMenuOpen(false)} active={pathname.startsWith('/awareness-training')}>
+          <MobileDropdown label="Features" active={pathname.startsWith('/awareness-training')}>
             <DropdownLinkMobile href="/awareness-training" label="Security Awareness Training" onClick={() => setMenuOpen(false)} />
             <DropdownLinkMobile href="/whatsapp-phishing" label="WhatsApp Phishing" onClick={() => setMenuOpen(false)} />
             <DropdownLinkMobile href="/email-phishing" label="Email Phishing" onClick={() => setMenuOpen(false)} />
@@ -92,7 +92,7 @@ export default function Navbar() {
             <DropdownLinkMobile href="/phishing-reporter" label="Phishing Reporter" onClick={() => setMenuOpen(false)} />
           </MobileDropdown>
           <MobileNavItem href="/partner" label="Partner" onClick={() => setMenuOpen(false)} active={isActive('/partner')} />
-          <MobileDropdown label="Resources" onClose={() => setMenuOpen(false)} active={pathname.startsWith('/blogs') || isActive('/about-us')}>
+          <MobileDropdown label="Resources" active={pathname.startsWith('/blogs') || isActive('/about-us')}>
             <DropdownLinkMobile href="/blogs" label="Blogs" onClick={() => setMenuOpen(false)} />
             <DropdownLinkMobile href="/about-us" label="About Us" onClick={() => setMenuOpen(false)} />
           </MobileDropdown>
@@ -205,14 +205,23 @@ function MobileNavItem({ href, label, onClick, active }: { href: string; label: 
   )
 }
 
-function MobileDropdown({ label, children, onClose, active }: { label: string; children: React.ReactNode; onClose: () => void; active?: boolean }) {
-  const [open, setOpen] = useState(false)
+function MobileDropdown({
+  label,
+  children,
+  active,
+}: {
+  label: string;
+  children: React.ReactNode;
+  active?: boolean;
+}) {
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="flex flex-col">
       <button
-        className={`flex justify-between items-center w-full py-3 px-2 font-semibold transition-colors rounded focus:outline-none ${active ? 'bg-[#45c2a4] text-white' : 'hover:bg-gray-100 text-gray-700'
-          }`}
+        className={`flex justify-between items-center w-full py-3 px-2 font-semibold transition-colors rounded focus:outline-none ${
+          active ? 'bg-[#45c2a4] text-white' : 'hover:bg-gray-100 text-gray-700'
+        }`}
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         aria-controls={`${label}-mobile-submenu`}
@@ -222,14 +231,16 @@ function MobileDropdown({ label, children, onClose, active }: { label: string; c
       </button>
       <div
         id={`${label}-mobile-submenu`}
-        className={`pl-4 mt-1 space-y-2 overflow-hidden transition-all duration-300 ${open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
-          }`}
+        className={`pl-4 mt-1 space-y-2 overflow-hidden transition-all duration-300 ${
+          open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
+        }`}
       >
         {children}
       </div>
     </div>
-  )
+  );
 }
+
 
 function DropdownLinkMobile({ href, label, onClick }: { href: string; label: string; onClick: () => void }) {
   return (

@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Headphones,
   Bug,
@@ -6,6 +8,8 @@ import {
   Users,
   Settings,
 } from "lucide-react";
+
+import Image from "next/image";
 
 export default function PartnerFeatures() {
   const features = [
@@ -58,14 +62,19 @@ export default function PartnerFeatures() {
       <div className="max-w-6xl mx-auto px-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {features.map((feature, index) => (
           <div key={index} className="text-center relative">
-            {/* Optional dot image for the third item */}
+            {/* Decorative dot image behind the 3rd item */}
             {index === 2 && (
-              <img
-                src="https://themepanthers.com/nioland/pages/wp-content/uploads/2023/08/home-17-banner-dot.png"
-                alt="Dot"
-                className="absolute -top-10 right-0 opacity-30 w-16 h-16 pointer-events-none hidden md:block"
-              />
+              <div className="absolute -top-10 right-0 w-16 h-16 opacity-30 pointer-events-none hidden md:block">
+                <Image
+                  src="https://themepanthers.com/nioland/pages/wp-content/uploads/2023/08/home-17-banner-dot.png"
+                  alt="Decorative Dot"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
             )}
+
             <div
               className={`flex items-center justify-center w-16 h-16 ${feature.color} rounded-full mx-auto mb-4`}
             >

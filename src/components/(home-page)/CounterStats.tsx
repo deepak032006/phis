@@ -2,6 +2,13 @@
 
 import { useEffect, useState, useRef } from "react"
 
+const stats = [
+  { number: 102, suffix: "k+", label: "Emails Sent" },
+  { number: 64, suffix: "k+", label: "SMS Sent" },
+  { number: 19, suffix: "k+", label: "Calls Triggered" },
+  { number: 84, suffix: "k+", label: "WhatsApp Text" },
+]
+
 function useOnScreen(ref: React.RefObject<HTMLDivElement | null>): boolean {
   const [isIntersecting, setIntersecting] = useState(false)
 
@@ -16,22 +23,13 @@ function useOnScreen(ref: React.RefObject<HTMLDivElement | null>): boolean {
 
     observer.observe(current)
 
-    return () => {
-      observer.disconnect()
-    }
-  }, [ref]) // ref rarely changes, or can use [] if you prefer
+    return () => observer.disconnect()
+  }, [ref])
 
   return isIntersecting
 }
 
 export default function CounterStats() {
-  const stats = [
-    { number: 102, suffix: "k+", label: "Emails Sent" },
-    { number: 64, suffix: "k+", label: "SMS Sent" },
-    { number: 19, suffix: "k+", label: "Calls Triggered" },
-    { number: 84, suffix: "k+", label: "WhatsApp Text" },
-  ]
-
   const ref = useRef<HTMLDivElement>(null)
   const isVisible = useOnScreen(ref)
   const [counts, setCounts] = useState(stats.map(() => 0))
@@ -42,7 +40,6 @@ export default function CounterStats() {
     const duration = 2000
     const steps = 60
     const intervalTime = duration / steps
-
     const intervals: NodeJS.Timeout[] = []
 
     stats.forEach((stat, index) => {
@@ -54,16 +51,13 @@ export default function CounterStats() {
 
         setCounts((prev) => {
           const updated = [...prev]
-
-          if (current >= stat.number) {
-            updated[index] = stat.number
-            clearInterval(id)
-          } else {
-            updated[index] = Math.floor(current)
-          }
-
+          updated[index] = current >= stat.number ? stat.number : Math.floor(current)
           return updated
         })
+
+        if (current >= stat.number) {
+          clearInterval(id)
+        }
       }, intervalTime)
 
       intervals.push(id)
@@ -72,7 +66,7 @@ export default function CounterStats() {
     return () => {
       intervals.forEach(clearInterval)
     }
-  }, [isVisible])
+  }, [isVisible]) // ✅ No more warning
 
   return (
     <section
