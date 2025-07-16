@@ -3,11 +3,7 @@ import { decode } from "html-entities";
 import Image from "next/image";
 import type { Metadata } from "next";
 
-type PostSlug = {
-  slug: string;
-};
-
-// Single getPost function for both page and metadata
+// ✅ Fetch the post by slug
 async function getPost(slug: string) {
   try {
     const res = await fetch(
@@ -28,7 +24,8 @@ async function getPost(slug: string) {
   }
 }
 
-export async function generateStaticParams(): Promise<PostSlug[]> {
+// ✅ Used exactly how Next.js expects
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
   try {
     const res = await fetch(
       "https://phishdefense.com/wp-json/wp/v2/posts?per_page=100&_fields=slug",
@@ -37,8 +34,9 @@ export async function generateStaticParams(): Promise<PostSlug[]> {
 
     if (!res.ok) return [];
 
-    const posts = (await res.json()) as PostSlug[];
-    return posts.map((post) => ({
+    const posts = await res.json();
+
+    return (posts as { slug: string }[]).map((post) => ({
       slug: post.slug,
     }));
   } catch (error) {
@@ -47,12 +45,14 @@ export async function generateStaticParams(): Promise<PostSlug[]> {
   }
 }
 
+// ✅ Inline the props instead of using custom type
 export async function generateMetadata({
   params,
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
   const post = await getPost(params.slug);
+
   if (!post) {
     return {
       title: "Post not found",
@@ -61,9 +61,7 @@ export async function generateMetadata({
         description: "This blog post could not be found.",
         url: `https://phishdefense.com/blogs/${params.slug}`,
         siteName: "PhishDefense",
-        images: [
-          { url: "https://phishdefense.com/default-og.jpg" }
-        ],
+        images: [{ url: "https://phishdefense.com/default-og.jpg" }],
         type: "article",
       },
       twitter: {
@@ -102,9 +100,13 @@ export async function generateMetadata({
   };
 }
 
-// ✅ Simplified props type to match Next.js expectations
-export default async function BlogPostPage(props: { params: { slug: string } }) {
-  const post = await getPost(props.params.slug);
+// ✅ Page component with correct inline typing
+export default async function BlogPostPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const post = await getPost(params.slug);
 
   if (!post) return notFound();
 
@@ -147,4 +149,3 @@ export default async function BlogPostPage(props: { params: { slug: string } }) 
     </article>
   );
 }
-
