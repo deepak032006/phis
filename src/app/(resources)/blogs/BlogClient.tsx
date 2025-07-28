@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { decode } from 'html-entities';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { getCategoryId } from '../../../utils/wp-api'; // Ensure this utility is defined
 
 // categories declared but never used? Use them in JSX or remove if not needed
 const categories = [
@@ -38,11 +39,13 @@ async function getPosts({
   search: string;
   category: string;
 }) {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
-  let url = `${baseUrl}/api/blogs?page=${page}`;
+  let url = `https://phishdefense.com/wp-json/wp/v2/posts?_embed&per_page=5&page=${page}`;
 
   if (search) url += `&search=${encodeURIComponent(search)}`;
-  if (category) url += `&category=${encodeURIComponent(category)}`;
+  if (category) {
+    const categoryId = await getCategoryId(category); // You need to define this helper
+    if (categoryId) url += `&categories=${categoryId}`;
+  }
 
   const res = await fetch(url);
 
@@ -53,8 +56,12 @@ async function getPosts({
     throw new Error("Failed to fetch posts");
   }
 
-  return await res.json();
+  const posts = await res.json();
+  const totalPages = parseInt(res.headers.get('X-WP-TotalPages') || '1');
+
+  return { posts, totalPages };
 }
+
 
 export default function BlogClient() {
   const searchParams = useSearchParams();

@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server';
 import { getCategoryId } from '../../../../utils/wp-api';
 
+
+// Static export configuration
+export const dynamic = "force-static";
+export const revalidate = false;  
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 

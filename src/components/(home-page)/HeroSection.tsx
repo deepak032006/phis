@@ -10,7 +10,7 @@ export default function HeroSection() {
     <section className="relative bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28 lg:py-36 grid lg:grid-cols-2 gap-16 items-center">
 
-        {/* Text Content */}
+        {/* Left: Text Content */}
         <div className="space-y-8">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -52,43 +52,39 @@ export default function HeroSection() {
               <FaWhatsapp className="text-lg" />
               Message Us
             </Link>
-
           </motion.div>
         </div>
 
-        {/* Visual Element / Mockup */}
+        {/* Right: Enlarged Laptop Frame + Video */}
         <motion.div
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="relative w-full"
+          className="relative w-full max-w-[850px] mx-auto"
         >
-          <div className="relative w-full max-w-2xl mx-auto">
-            {/* Laptop Frame */}
-            <Image
-              src="/home/laptop.webp"
-              alt="Laptop Frame"
-              width={1200}
-              height={800}
-              className="w-full h-auto pointer-events-none select-none"
+          {/* Laptop image */}
+          <Image
+            src="/home/laptop.jpg" // Ensure this file exists in your /public folder
+            alt="Laptop Frame"
+            width={1400}
+            height={900}
+            className="w-full h-auto pointer-events-none select-none"
+            priority
+          />
+
+          {/* Adjusted video overlay inside the screen */}
+          <div className="absolute top-[12.8%] left-[12.7%] w-[74.8%] h-[58.2%] overflow-hidden rounded-[6px] shadow-lg">
+            <iframe
+              className="w-full h-full"
+              src="https://www.youtube.com/embed/TbwVFIhXR2g?autoplay=1&mute=1&loop=1&playlist=TbwVFIhXR2g&controls=0&rel=0&modestbranding=1&playsinline=1"
+              title="Phish Defense Demo"
+              loading="lazy"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              allowFullScreen
+              frameBorder="0"
             />
-
-            {/* Video inside laptop screen */}
-            <div className="absolute top-[10.5%] left-[8.2%] w-[83.6%] h-[71.5%] rounded-md overflow-hidden shadow-lg">
-              <iframe
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/TbwVFIhXR2g?mute=1&loop=1&controls=0&rel=0&modestbranding=1&playsinline=1"
-                title="Phish Defense Demo"
-                loading="lazy"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
           </div>
-
         </motion.div>
-
-
       </div>
     </section>
   )

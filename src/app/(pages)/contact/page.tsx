@@ -7,17 +7,34 @@ import 'react-phone-number-input/style.css';
 const ContactForm: React.FC = () => {
   const [phone, setPhone] = useState<string | undefined>();
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+    }).then((res) => {
+      if (res.ok) {
+        window.location.href = '/'; // redirect to homepage
+      } else {
+        alert('Submission failed');
+      }
+    });
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-[#b2dde3] to-[##e0f7fa] px-4 mt-15">
       <form
-        action="https://formsubmit.co/970de22de88802dfc425acde6bbb42a7"
+        action="https://formsubmit.co/1230404b6da3126570fb7d5d509f8f53"
         method="POST"
+        onSubmit={handleSubmit}
         className="w-full max-w-lg bg-white rounded-xl shadow-lg p-8 space-y-6"
       >
         {/* Hidden fields */}
         <input type="hidden" name="_captcha" value="false" />
         <input type="hidden" name="_template" value="box" />
-        <input type="hidden" name="_next" value="https://phishdefense.com/" />
+        <input type="hidden" name="_next" value="/" />
 
         {/* Title */}
         <h2 className="text-3xl font-bold text-[#45c2a4] text-center">Contact Us</h2>
@@ -66,11 +83,10 @@ const ContactForm: React.FC = () => {
         <button
           type="submit"
           disabled={!phone || !isValidPhoneNumber(phone)}
-          className={`w-full px-6 py-3 rounded-md font-semibold transition-colors duration-300 ${
-            phone && isValidPhoneNumber(phone)
+          className={`w-full px-6 py-3 rounded-md font-semibold transition-colors duration-300 ${phone && isValidPhoneNumber(phone)
               ? 'bg-[#45c2a4] text-white hover:bg-[#3db194]'
               : 'bg-gray-400 text-white cursor-not-allowed'
-          }`}
+            }`}
         >
           Send Message 🚀
         </button>

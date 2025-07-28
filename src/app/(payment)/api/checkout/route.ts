@@ -3,20 +3,25 @@ import Stripe from 'stripe';
 
 const secretKey = process.env.STRIPE_SECRET_KEY;
 
-// Do NOT return here — just check
 const stripe = secretKey
-  ? new Stripe(secretKey, {   apiVersion: '2025-06-30.basil', })
+  ? new Stripe(secretKey, {
+      apiVersion: '2023-10-16',
+    })
   : null;
 
 export async function POST(req: Request) {
   if (!stripe) {
-    console.error('❌ STRIPE_SECRET_KEY not set — Stripe not initialized');
-    return NextResponse.json({ error: 'Payment service unavailable' }, { status: 500 });
+    console.error('❌ STRIPE_SECRET_KEY not set');
+    return NextResponse.json({ error: 'Stripe not initialized' }, { status: 500 });
   }
 
   try {
     const body = await req.json();
     const { totalCost } = body;
+
+    if (!totalCost || isNaN(totalCost)) {
+      return NextResponse.json({ error: 'Invalid totalCost' }, { status: 400 });
+    }
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
